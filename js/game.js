@@ -33,9 +33,11 @@ scene.add(board);
 camera.position.x = 0
 camera.position.y = 3;
 camera.position.z = 10;
-camera.lookAt(5, 0, 10);
+// camera.lookAt(0, 0, 0);
+
 
 controls = new OrbitControls(camera, renderer.domElement)
+controls.target.set(4.5, 0, 4.5)
 
 window.requestAnimationFrame(animate);
 }
