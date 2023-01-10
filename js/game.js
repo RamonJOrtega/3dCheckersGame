@@ -38,13 +38,17 @@ camera.position.z = 10;
 
 controls = new OrbitControls(camera, renderer.domElement)
 controls.target.set(4.5, 0, 4.5)
-
+//controls.enablePan = false; if you want to disable pan
+//controls.maxPolarAngle = Math.PI/2; if you don't want to look under the board
+controls.enableDamping = true;
 window.requestAnimationFrame(animate);
 }
 
 function animate() {
+controls.update();
 renderer.render(scene, camera);
 window.requestAnimationFrame(animate);
+
 
 }
 
