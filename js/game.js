@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls} from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+// import { GLTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/GLTFLoader.js';
+import { STLLoader } from 'https://unpkg.com/three/examples/jsm/loaders/STLLoader.js';
 
 var scene, camera, renderer, cube, controls;
 
@@ -30,7 +32,24 @@ for (let x = 0; x < 10; x++) {
     }
 }
 scene.add(board);
-camera.position.x = 0
+//load a cool checker piece from STL file
+const loader = new STLLoader();
+loader.load('../checkerPiece.stl', function(geometry) {
+    // let checkerMesh = geometry.scene.children.find((child) => child.name === "CheckerPiece");
+    //checkerMesh.scale(checkerMesh.scale.x*05, checkerMesh.scale.y*05, checkerMesh.scale.z*05)
+    let mesh;
+    if (geometry.hasColors) { mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({opacity: geometry.alpha, vertexColors: true}))
+    } else { mesh = new THREE.Mesh(geometry, /*new THREE.MeshBasicMaterial({color: 0xd0a92c })*/)}
+    //mesh.scale(mesh.scale.x*.05, mesh.scale.y*.05, mesh.scale.z*.05)
+
+    scene.add(mesh);
+})
+// add a dash of color if the STL has any
+
+const light = new THREE.PointLight(0xffffff, 2, 200)
+light.position.set(4.5, 10, 4.5);
+scene.add(light);
+camera.position.x = 0;
 camera.position.y = 3;
 camera.position.z = 10;
 // camera.lookAt(0, 0, 0);
