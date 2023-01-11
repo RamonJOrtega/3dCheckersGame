@@ -60,7 +60,8 @@
 ||
 ||==================================================================================
 */
-var Draughts = function (fen) {
+console.log("we here")
+var CheckersGameLogic = function (fen) {
   var BLACK = 'B'
   var WHITE = 'W'
   // var EMPTY = -1
@@ -1265,26 +1266,12 @@ var Draughts = function (fen) {
 }
 
 if (typeof exports !== 'undefined') {
-  exports.Draughts = Draughts
+  exports.CheckersGameLogic = CheckersGameLogic
 }
 
 if (typeof define !== 'undefined') {
   define(function () {
-    return Draughts
+    return CheckersGameLogic
   })
 }
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-draughts.js/draughts.js at master · shubhendusaurabh/draughts.js
+
