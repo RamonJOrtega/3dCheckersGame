@@ -3,7 +3,7 @@ import { OrbitControls} from 'https://unpkg.com/three/examples/jsm/controls/Orbi
 // import { GLTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/GLTFLoader.js';
 import { STLLoader } from 'https://unpkg.com/three/examples/jsm/loaders/STLLoader.js';
 
-var scene, camera, renderer, cube, controls;
+var scene, camera, renderer, cube, controls, droughts;
 
 function init() {
 
@@ -36,15 +36,12 @@ scene.add(board);
 const loader = new STLLoader();
 loader.load('../checkerPiece.stl', function(geometry) {
     // let checkerMesh = geometry.scene.children.find((child) => child.name === "CheckerPiece");
-    //checkerMesh.scale(checkerMesh.scale.x*05, checkerMesh.scale.y*05, checkerMesh.scale.z*05)
-    let mesh;
-    if (geometry.hasColors) { mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({opacity: geometry.alpha, vertexColors: true}))
-    } else { mesh = new THREE.Mesh(geometry, /*new THREE.MeshBasicMaterial({color: 0xd0a92c })*/)}
-    //mesh.scale(mesh.scale.x*.05, mesh.scale.y*.05, mesh.scale.z*.05)
-
+    let mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color: 0xd0a92c }))
+    mesh.scale.set(mesh.scale.x * .025, mesh.scale.y * .025, mesh.scale.z * .025)
+    mesh.rotation.x += Math.PI ;
+    mesh.position.y += .23 ;
     scene.add(mesh);
 })
-// add a dash of color if the STL has any
 
 const light = new THREE.PointLight(0xffffff, 2, 200)
 light.position.set(4.5, 10, 4.5);
@@ -61,6 +58,10 @@ controls.target.set(4.5, 0, 4.5)
 //controls.maxPolarAngle = Math.PI/2; if you don't want to look under the board
 controls.enableDamping = true;
 window.requestAnimationFrame(animate);
+}
+
+function addCheckers(checkerMesh) {
+
 }
 
 function animate() {
