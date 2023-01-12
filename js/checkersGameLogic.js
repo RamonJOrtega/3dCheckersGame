@@ -60,7 +60,6 @@
 ||
 ||==================================================================================
 */
-console.log("we here")
 var CheckersGameLogic = function (fen) {
   var BLACK = 'B'
   var WHITE = 'W'
