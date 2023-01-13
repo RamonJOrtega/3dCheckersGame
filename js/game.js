@@ -106,8 +106,9 @@ function addCheckers(checkerMesh) {
             scene.add(piece);
         } else {
             gameState.push(0);
+            // 0 index element means black turn first
         }
-
+        gameState[0] = 'b'
     }
 }
 
@@ -151,6 +152,10 @@ function onPointerMove( event ) {// calculate pointer position in normalized dev
 function updateGameState(selectedPiece, targetSquare) {
     gameState[gameState.indexOf(selectedPiece)] = 0;
     gameState[targetSquare] = selectedPiece;
+    if (gameState[0] === 'b') {gameState[0] = 'w'} // if black's turn, set white
+    else  {gameState[0] = 'b'} // if whites turn, set black      
+    
+   
     console.log(gameState)
 }
 
@@ -168,7 +173,7 @@ function onClick(event) {
       return;
     }
 
-    if (selectedPiece) {
+    if (selectedPiece && selectedPieceColor === gameState[0]) {
       const prevSquare = selectedSquare;
       raycaster.setFromCamera(pointer, camera);
       intersects = raycaster.intersectObjects(board.children);
