@@ -1,5 +1,125 @@
 'use strict'
 
+function findAllowedMoves(blackOrWhiteChar, manOrKingString, prevSquare, currentSquare, squaresNumsOccupiedArray) {
+  let allowedMoves = [];
+  const topManBlackJump = prevSquare + 11;
+  const highManBlackJump = prevSquare + 9;
+  const topManBlack = prevSquare + 6;
+  const higherManBlack = prevSquare + 5;
+  const highManBlack = prevSquare + 4;
+  const lowManWhite = prevSquare - 4;
+  const lowerManWhite = prevSquare -5
+  const bottomManWhite = prevSquare -6;
+  const lowManWhiteJump = prevSquare -9;
+  const bottomManWhiteJump = prevSquare -11;
+
+  const topKingJump = prevSquare + 11;
+  const highKingJump = prevSquare + 9;
+  const topKing = prevSquare + 6;
+  const higherKing = prevSquare + 5;
+  const highKing = prevSquare + 4; 
+  const lowKing= prevSquare - 4;
+  const lowerKing = prevSquare -5; 
+  const bottomKing = prevSquare -6;
+  const lowKingJump = prevSquare - 9;
+  const bottomKingJump = prevSquare -11;
+
+  if (      manOrKingString === 'man' && blackOrWhiteChar === 'b') { 
+    allowedMoves = validateVacancyAndPush(allowedMoves, squaresNumsOccupiedArray);
+    allowedMoves = validateOnBoardAndPush([topManBlackJump, highManBlackJump ,topManBlack, higherManBlack, highManBlack], prevSquare, currentSquare);
+    
+    return allowedMoves;
+  } else if (manOrKingString === 'man' && blackOrWhiteChar === 'w' ) {
+    allowedMoves = validateVacancyAndPush(allowedMoves, squaresNumsOccupiedArray);
+    allowedMoves = validateOnBoardAndPush([lowManWhite, lowerManWhite, bottomManWhite, lowManWhiteJump, bottomManWhiteJump], prevSquare, currentSquare);
+    return allowedMoves;
+  } else if (manOrKingString === 'king' && blackOrWhiteChar === 'b') {
+    allowedMoves = validateVacancyAndPush(allowedMoves, squaresNumsOccupiedArray);
+    allowedMoves = validateOnBoardAndPush([topKingJump, highKingJump, topKing, higherKing, highKing, lowKing, lowerKing, bottomKing, lowKingJump, bottomKingJump], prevSquare, currentSquare);
+    return allowedMoves;
+  } else if (manOrKingString === 'king' && blackOrWhiteChar === 'w') {
+    allowedMoves = validateVacancyAndPush(allowedMoves, squaresNumsOccupiedArray);
+    allowedMoves = validateOnBoardAndPush([topKingJump, highKingJump, topKing, highKing, lowKing, bottomKing, lowKingJump, bottomKingJump], prevSquare, currentSquare);
+    return allowedMoves;
+  } else {
+    console.log("who f-ing knows cause we don't have data where can jump");
+    return null;
+  }
+}
+
+function validateOnBoardAndPush(arrayOfPossibleMoves, prevSquare, futureSquare) {
+  const boardBoundry = [1, 2, 3, 4, 5, 15, 25, 35, 45, 50, 49, 48, 47, 46, 36, 26, 16, 6]
+  console.log("are these moves on board? " + arrayOfPossibleMoves)
+  let onBoundry = false, onRightBoundry=false, onLeftBoundry =false, inLimits = false, movingFWD = false, movingBCK = false; 
+  let case1 = false, case2=false, case3 = false, case4 =false, case5 = false, case6 =false;;
+  let validatedMovesArray = [], futureBoundryArray = [];
+  movingBCK = prevSquare > futureSquare ? true: false; 
+  movingFWD = prevSquare < futureSquare ? true: false; 
+  if (movingFWD) {arrayOfPossibleMoves.sort(function(a,b){return a-b})}; //sort ascend}
+  if (movingBCK) {arrayOfPossibleMoves.sort(function(a,b){return b-a})}; // sort descend
+  if (boardBoundry.includes(prevSquare)) {
+    onBoundry = true 
+    if (prevSquare % 10 ===5) {onRightBoundry = true}
+    if (prevSquare % 10 ===6) {onLeftBoundry = true}
+  }
+
+  for (let i = 0 ; i < arrayOfPossibleMoves.length; i++) { 
+      if (arrayOfPossibleMoves[i] > 0 && arrayOfPossibleMoves[i] < 51) { 
+        inLimits = true;
+        if (onBoundry) {
+          if (movingFWD && onRightBoundry && arrayOfPossibleMoves[i] != (prevSquare + 6)) {
+            case1 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+          if (movingFWD && onRightBoundry && arrayOfPossibleMoves[i] != (prevSquare + 4)) {
+            case2 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+          if (movingFWD && onLeftBoundry && arrayOfPossibleMoves[i] != (prevSquare + 4)) {
+            case3 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+          if (movingFWD && onLeftBoundry && arrayOfPossibleMoves[i] != (prevSquare + 6)) {
+            case4 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+          if (movingBCK && onRightBoundry && arrayOfPossibleMoves[i] != (prevSquare - 4)) {
+            case5 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+          if (movingBCK && onLeftBoundry && arrayOfPossibleMoves[i] != (prevSquare - 6)) {
+            case6 = true
+            validatedMovesArray.push(arrayOfPossibleMoves[i])
+          }
+        }
+        else {
+          validatedMovesArray.push(arrayOfPossibleMoves[i])
+        }
+        console.log(" | moveFWD: " + movingFWD +"leftBound: " + onLeftBoundry + " | rightBound: " + onRightBoundry + " | can I move to?: " + arrayOfPossibleMoves[i] + " | case1234: " + case1 + case2 + case3 + case4 + case5 +case6 )
+      }
+    }
+      
+
+  console.log("valid moves: " + validatedMovesArray)
+  return validatedMovesArray;
+}
+
+
+function validateVacancyAndPush(arrayOfPossibleMoves, squaresNumsOccupiedArray) {
+  let validatedMovesArray = [];
+  //console.log(squaresNumsOccupiedArray)
+  //console.log(arrayOfPossibleMoves)
+  for (let i = 0 ; i < arrayOfPossibleMoves.length; i++) {
+    if (!squaresNumsOccupiedArray.includes(arrayOfPossibleMoves[i])) {
+      validatedMovesArray.push(arrayOfPossibleMoves[i]);
+    }
+  }
+  return validatedMovesArray;
+
+}
+
+
+
 /*
 ||==================================================================================
 || DESCRIPTION OF IMPLEMENTATION PRINCIPLES
